@@ -1,0 +1,28 @@
+package com.challenge.userpostapi.infrastructure.mapper;
+
+import com.challenge.userpostapi.application.dto.UserRequestDTO;
+import com.challenge.userpostapi.application.dto.UserResponseDTO;
+import com.challenge.userpostapi.domain.model.UserModel;
+import com.challenge.userpostapi.infrastructure.persistence.entity.UserEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface UserMapper {
+    @Mapping(source = "roleEntity", target = "roleModel")
+    UserModel toUserModel(UserEntity userEntity);
+
+    @Mapping(source = "roleModel", target = "roleEntity")
+    UserEntity toUserEntity(UserModel userModel);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "roleModel", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    UserModel toUserModel(UserRequestDTO userRequestDTO);
+
+    @Mapping(source = "roleModel", target = "role")
+    UserResponseDTO toUserResponseDTO(UserModel userModel);
+}
