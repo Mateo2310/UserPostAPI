@@ -19,4 +19,8 @@ public class UserModel {
     private RoleModel roleModel;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public UserModel(Long id) {
+        this.id = id;
+    }
 }

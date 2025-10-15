@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring",
+        uses = {UserMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PostMapper {
 
@@ -21,9 +22,9 @@ public interface PostMapper {
     @Mapping(target = "updatedAt", ignore = true)
     PostModel toPostModel(PostRequestDTO postRequestDTO);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+//    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "author", ignore = true)
+//    @Mapping(target = "createdAt", ignore = true)
+//    @Mapping(target = "updatedAt", ignore = true)
     PostResponseDTO toPostDTO(PostModel postModel);
 }

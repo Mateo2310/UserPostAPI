@@ -9,18 +9,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring",
+        uses = {RoleMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
     @Mapping(source = "roleEntity", target = "roleModel")
     UserModel toUserModel(UserEntity userEntity);
 
+    @Mapping(target = "posts", ignore = true)
     @Mapping(source = "roleModel", target = "roleEntity")
     UserEntity toUserEntity(UserModel userModel);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "roleModel", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(source = "roleId", target = "roleModel.id")
     UserModel toUserModel(UserRequestDTO userRequestDTO);
 
     @Mapping(source = "roleModel", target = "role")

@@ -38,4 +38,9 @@ public class UserEntityRepositoryImpl implements UserRepositoryInterface {
     public void deleteById(Long id) {
         this.userEntityInterfaceRepository.deleteById(id);
     }
+
+    @Override
+    public UserModel findByUsername(String username) {
+        return this.userEntityInterfaceRepository.findByUsername(username).map(this.userMapper::toUserModel).orElse(null);
+    }
 }

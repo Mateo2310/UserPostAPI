@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
     @Override
     public void save(RoleRequestDTO request) {
         try {
+            request.setName(request.getName().toUpperCase());
             this.roleRepository.save(this.roleMapper.toRoleModel(request));
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException("Violación de integridad al guardar el rol", e);
