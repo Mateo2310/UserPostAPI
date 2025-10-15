@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -104,5 +105,15 @@ public class UserServiceImpl implements UserServiceInterface {
         } catch (Exception e) {
             throw new UnexpectedException("Error inesperado al obtener los usuarios", e);
         }
+    }
+
+    @Override
+    public UserResponseDTO update(Long id, UserRequestDTO requestDTO) {
+        return null;
+    }
+
+    @Override
+    public UserResponseDTO partialUpdate(Long id, Map<String, Object> partialUpdateDTO) {
+        return null;
     }
 }

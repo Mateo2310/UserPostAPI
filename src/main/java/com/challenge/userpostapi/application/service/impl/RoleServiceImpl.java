@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +75,15 @@ public class RoleServiceImpl implements RoleServiceInterface {
         } catch (Exception e) {
             throw new UnexpectedException("Error inesperado al obtener los roles", e);
         }
+    }
+
+    @Override
+    public RoleResponseDTO update(Long id, RoleRequestDTO requestDTO) {
+        return null;
+    }
+
+    @Override
+    public RoleResponseDTO partialUpdate(Long id, Map<String, Object> partialUpdateDTO) {
+        return null;
     }
 }
