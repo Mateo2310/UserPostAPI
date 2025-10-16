@@ -1,5 +1,7 @@
 package com.challenge.userpostapi.application.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleRequestDTO {
-//    @NotBlank(message = "El nombre es obligatorio")
-//    @NotNull(message = "El nombre es obligatorio")
+    @NotBlank(message = "El nombre es obligatorio")
+    @NotNull(message = "El nombre es obligatorio")
     private String name;
 }

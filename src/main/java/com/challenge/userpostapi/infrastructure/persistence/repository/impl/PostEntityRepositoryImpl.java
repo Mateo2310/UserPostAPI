@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,20 +18,21 @@ public class PostEntityRepositoryImpl implements PostRepositoryInterface {
     private final PostMapper postMapper;
 
     @Override
-    public PostModel findByIdAndAuthorId(Long id, Long userId) {
-        return this.postMapper.toPostModel(this.postEntityInterfaceRepository.findByIdAndAuthorId(id, userId));
+    public Optional<PostModel> findByIdAndAuthorId(Long id, Long userId) {
+        PostModel postModel = this.postMapper.toPostModel(this.postEntityInterfaceRepository.findByIdAndAuthor_Id(id, userId).orElse(null));
+        return Optional.ofNullable(postModel);
     }
 
     @Override
     public List<PostModel> findAllByUserId(Long userId) {
-        return this.postEntityInterfaceRepository.findAllByAuthorId(userId).stream()
+        return this.postEntityInterfaceRepository.findAllByAuthor_Id(userId).stream()
                 .map(this.postMapper::toPostModel)
                 .toList();
     }
 
     @Override
     public void deleteByIdAndAuthorId(Long id, Long userId) {
-        this.postEntityInterfaceRepository.deleteByIdAndAuthorId(id, userId);
+        this.postEntityInterfaceRepository.deleteByIdAndAuthor_Id(id, userId);
     }
 
     @Override
@@ -47,8 +49,9 @@ public class PostEntityRepositoryImpl implements PostRepositoryInterface {
     }
 
     @Override
-    public PostModel findById(Long id) {
-        return this.postMapper.toPostModel(this.postEntityInterfaceRepository.findById(id).orElse(null));
+    public Optional<PostModel> findById(Long id) {
+        PostModel postModel =  this.postMapper.toPostModel(this.postEntityInterfaceRepository.findById(id).orElse(null));
+        return Optional.ofNullable(postModel);
     }
 
     @Override

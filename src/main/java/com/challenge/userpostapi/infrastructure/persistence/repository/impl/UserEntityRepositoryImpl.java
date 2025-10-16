@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,8 +24,9 @@ public class UserEntityRepositoryImpl implements UserRepositoryInterface {
     }
 
     @Override
-    public UserModel findById(Long id) {
-        return this.userMapper.toUserModel(this.userEntityInterfaceRepository.findById(id).orElse(null));
+    public Optional<UserModel> findById(Long id) {
+        UserModel userModel = this.userMapper.toUserModel(this.userEntityInterfaceRepository.findById(id).orElse(null));
+        return Optional.ofNullable(userModel);
     }
 
     @Override

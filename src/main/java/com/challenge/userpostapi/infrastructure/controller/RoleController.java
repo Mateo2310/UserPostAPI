@@ -4,11 +4,13 @@ import com.challenge.userpostapi.application.dto.ResponseGeneric;
 import com.challenge.userpostapi.application.dto.RoleRequestDTO;
 import com.challenge.userpostapi.application.dto.RoleResponseDTO;
 import com.challenge.userpostapi.application.service.interfaces.RoleServiceInterface;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/role")
@@ -17,7 +19,7 @@ public class RoleController {
     private final RoleServiceInterface roleService;
 
     @PostMapping
-    public ResponseEntity<?> createRole(@RequestBody RoleRequestDTO roleCreateDTO) {
+    public ResponseEntity<?> createRole(@RequestBody @Valid RoleRequestDTO roleCreateDTO) {
         this.roleService.save(roleCreateDTO);
         return ResponseEntity.ok().body(new ResponseGeneric<>("success", "Role created", null));
     }
@@ -38,5 +40,17 @@ public class RoleController {
     public ResponseEntity<?> getRole(@PathVariable Long id) {
         RoleResponseDTO role = this.roleService.findById(id);
         return ResponseEntity.ok().body(new  ResponseGeneric<>("success", "Role", role));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRole(@PathVariable Long id, @RequestBody @Valid RoleRequestDTO roleUpdateDTO) {
+        RoleResponseDTO role = this.roleService.update(id, roleUpdateDTO);
+        return ResponseEntity.ok().body(new  ResponseGeneric<>("success", "Role updated", role));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updatePartialRole(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        RoleResponseDTO role = this.roleService.partialUpdate(id, updates);
+        return ResponseEntity.ok().body(new  ResponseGeneric<>("success", "Role updated", role));
     }
 }

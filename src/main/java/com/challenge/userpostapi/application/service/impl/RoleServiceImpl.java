@@ -3,9 +3,8 @@ package com.challenge.userpostapi.application.service.impl;
 import com.challenge.userpostapi.application.dto.RoleRequestDTO;
 import com.challenge.userpostapi.application.dto.RoleResponseDTO;
 import com.challenge.userpostapi.application.service.interfaces.RoleServiceInterface;
-import com.challenge.userpostapi.domain.exception.BusinessException;
-import com.challenge.userpostapi.domain.exception.DatabaseUnavailableException;
-import com.challenge.userpostapi.domain.exception.UnexpectedException;
+import com.challenge.userpostapi.domain.exception.*;
+import com.challenge.userpostapi.domain.model.RoleModel;
 import com.challenge.userpostapi.domain.repository.RoleRepositoryInterface;
 import com.challenge.userpostapi.infrastructure.mapper.RoleMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,6 @@ public class RoleServiceImpl implements RoleServiceInterface {
             throw new BusinessException("Violación de integridad al guardar el rol", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al guardar el rol", e);
         }
     }
 
@@ -44,21 +41,18 @@ public class RoleServiceImpl implements RoleServiceInterface {
             throw new BusinessException("Violación de integridad al eliminar el rol", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al eliminar el rol", e);
         }
     }
 
     @Override
     public RoleResponseDTO findById(Long id) {
         try {
-            return this.roleMapper.toRoleResponseDTO(this.roleRepository.findById(id));
+            RoleModel roleModel = this.roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
+            return this.roleMapper.toRoleResponseDTO(roleModel);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException("Violación de integridad al obtener el rol", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al obtener el rol", e);
         }
     }
 
@@ -72,18 +66,40 @@ public class RoleServiceImpl implements RoleServiceInterface {
             throw new BusinessException("Violación de integridad al obtener los roles", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al obtener los roles", e);
         }
     }
 
     @Override
     public RoleResponseDTO update(Long id, RoleRequestDTO requestDTO) {
-        return null;
+        try {
+            RoleModel roleModel = this.roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
+            roleModel.setName(requestDTO.getName());
+            RoleModel roleSaved = this.roleRepository.save(roleModel);
+            return this.roleMapper.toRoleResponseDTO(roleSaved);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Violación de integridad al obtener el rol", e);
+        } catch (CannotCreateTransactionException cctex) {
+            throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
+        }
     }
 
     @Override
     public RoleResponseDTO partialUpdate(Long id, Map<String, Object> partialUpdateDTO) {
-        return null;
+        try {
+            RoleModel roleModel = this.roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
+            partialUpdateDTO.forEach((key, value) -> {
+                if (key.equals("name")) {
+                    roleModel.setName((String) value);
+                } else {
+                    throw new ValidationException("Campo invalido: " + key);
+                }
+            });
+            RoleModel roleSaved = this.roleRepository.save(roleModel);
+            return this.roleMapper.toRoleResponseDTO(roleSaved);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Violación de integridad al obtener el rol", e);
+        } catch (CannotCreateTransactionException cctex) {
+            throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
+        }
     }
 }

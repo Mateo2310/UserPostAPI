@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,8 +24,9 @@ public class RoleEntityRepositoryImpl implements RoleRepositoryInterface {
     }
 
     @Override
-    public RoleModel findById(Long id) {
-        return this.roleMapper.toRoleModel(this.roleEntityInterfaceRepository.findById(id).orElse(null));
+    public Optional<RoleModel> findById(Long id) {
+        RoleModel roleModel = this.roleMapper.toRoleModel(this.roleEntityInterfaceRepository.findById(id).orElse(null));
+        return Optional.ofNullable(roleModel);
     }
 
     @Override

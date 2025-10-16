@@ -3,9 +3,7 @@ package com.challenge.userpostapi.application.service.impl;
 import com.challenge.userpostapi.application.dto.UserRequestDTO;
 import com.challenge.userpostapi.application.dto.UserResponseDTO;
 import com.challenge.userpostapi.application.service.interfaces.UserServiceInterface;
-import com.challenge.userpostapi.domain.exception.BusinessException;
-import com.challenge.userpostapi.domain.exception.DatabaseUnavailableException;
-import com.challenge.userpostapi.domain.exception.UnexpectedException;
+import com.challenge.userpostapi.domain.exception.*;
 import com.challenge.userpostapi.domain.model.RoleModel;
 import com.challenge.userpostapi.domain.model.UserModel;
 import com.challenge.userpostapi.domain.repository.RoleRepositoryInterface;
@@ -34,10 +32,7 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     public String save(UserRequestDTO request) {
         try {
-            RoleModel roleModel = this.roleRepository.findById(request.getRoleId());
-            if(roleModel == null){
-                throw new BusinessException("Role Not Found. Id: " + request.getRoleId());
-            }
+            RoleModel roleModel = this.roleRepository.findById(request.getRoleId()).orElseThrow(() -> new UnexpectedException("El rol con id " + request.getRoleId() + " no existe"));
             UserModel userModel = this.userMapper.toUserModel(request);
             userModel.setPassword(passwordEncoder.encode(request.getPassword()));
             userModel.setRoleModel(roleModel);
@@ -47,8 +42,6 @@ public class UserServiceImpl implements UserServiceInterface {
             throw new BusinessException("Violación de integridad al guardar el usuario", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al guardar el usuario", e);
         }
     }
 
@@ -60,8 +53,6 @@ public class UserServiceImpl implements UserServiceInterface {
             throw new BusinessException("Violación de integridad al obtener el usuario", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al obtener el usuario", e);
         }
     }
 
@@ -73,22 +64,18 @@ public class UserServiceImpl implements UserServiceInterface {
             throw new BusinessException("Violación de integridad al eliminar el usuario", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al eliminar el usuario", e);
         }
     }
 
     @Override
     public UserResponseDTO findById(Long id) {
         try {
-            UserModel userModel = this.userRepository.findById(id);
+            UserModel userModel = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario con id " + id + " no existe"));
             return this.userMapper.toUserResponseDTO(userModel);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException("Violación de integridad al obtener el usuario", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al obtener el usuario", e);
         }
     }
 
@@ -102,18 +89,44 @@ public class UserServiceImpl implements UserServiceInterface {
             throw new BusinessException("Violación de integridad al obtener los usuarios", e);
         } catch (CannotCreateTransactionException cctex) {
             throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
-        } catch (Exception e) {
-            throw new UnexpectedException("Error inesperado al obtener los usuarios", e);
         }
     }
 
     @Override
     public UserResponseDTO update(Long id, UserRequestDTO requestDTO) {
-        return null;
+        try {
+            RoleModel roleModel = this.roleRepository.findById(requestDTO.getRoleId()).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
+            UserModel userModel = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe"));
+            userModel.setUsername(requestDTO.getUsername());
+            userModel.setPassword(this.passwordEncoder.encode(requestDTO.getPassword()));
+            userModel.setRoleModel(roleModel);
+            userModel = this.userRepository.save(userModel);
+            return this.userMapper.toUserResponseDTO(userModel);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Violación de integridad al obtener los usuarios", e);
+        } catch (CannotCreateTransactionException cctex) {
+            throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
+        }
     }
 
     @Override
     public UserResponseDTO partialUpdate(Long id, Map<String, Object> partialUpdateDTO) {
-        return null;
+        try {
+            UserModel userModel = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe"));
+            partialUpdateDTO.forEach((key, value) -> {
+                switch (key) {
+                    case "username" -> userModel.setUsername((String) value);
+                    case "password" -> userModel.setPassword(this.passwordEncoder.encode((String) value));
+                    case "roleId" -> userModel.setRoleModel(this.roleRepository.findById(Long.parseLong((String) value)).orElseThrow(() -> new ResourceNotFoundException("El rol no existe")));
+                    default -> throw new ValidationException("Campo invalido: " + key);
+                }
+            });
+            UserModel userSaved = this.userRepository.save(userModel);
+            return this.userMapper.toUserResponseDTO(userSaved);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Violación de integridad al obtener los usuarios", e);
+        } catch (CannotCreateTransactionException cctex) {
+            throw new DatabaseUnavailableException("No se pudo conectar con la base de datos", cctex);
+        }
     }
 }
