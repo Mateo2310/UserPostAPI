@@ -40,4 +40,9 @@ public class RoleEntityRepositoryImpl implements RoleRepositoryInterface {
     public void deleteById(Long id) {
         this.roleEntityInterfaceRepository.deleteById(id);
     }
+
+    @Override
+    public Boolean existsByName(String name) {
+        return this.roleEntityInterfaceRepository.existsRoleEntityByName(name);
+    }
 }

@@ -4,4 +4,5 @@ import com.challenge.userpostapi.infrastructure.persistence.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleEntityInterfaceRepository extends JpaRepository<RoleEntity, Long> {
+    Boolean existsRoleEntityByName(String name);
 }
