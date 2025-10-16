@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: userpost-api
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=userpostapidb
+      - DB_USER=userpostapi
+      - DB_PASSWORD=wP9dX2rL7kF3bQ8hN4mA6cE1jY
+    networks:
+      - userpostapi_network
+
+  db:
+    image: postgres:latest
+    container_name: userpost-db
+    environment:
+      - POSTGRES_DB=userpostapidb
+      - POSTGRES_USER=userpostapi
+      - POSTGRES_PASSWORD=wP9dX2rL7kF3bQ8hN4mA6cE1jY
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_userpost_api:/var/lib/postgresql/data/pgdata
+    networks:
+      - userpostapi_network
+
+volumes:
+  postgres_data_userpost_api:
+    external: true
+
+networks:
+  userpostapi_network:
+    external: true
