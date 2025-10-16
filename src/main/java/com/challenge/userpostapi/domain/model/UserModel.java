@@ -15,7 +15,6 @@ public class UserModel {
     private Long id;
     private String username;
     private String password;
-    private Boolean enabled;
     private RoleModel roleModel;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

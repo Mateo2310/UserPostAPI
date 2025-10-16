@@ -3,6 +3,7 @@ package com.challenge.userpostapi.application.service.impl;
 import com.challenge.userpostapi.application.dto.RoleRequestDTO;
 import com.challenge.userpostapi.application.dto.RoleResponseDTO;
 import com.challenge.userpostapi.application.service.interfaces.RoleServiceInterface;
+import com.challenge.userpostapi.domain.enums.RoleEnum;
 import com.challenge.userpostapi.domain.exception.*;
 import com.challenge.userpostapi.domain.model.RoleModel;
 import com.challenge.userpostapi.domain.repository.RoleRepositoryInterface;
@@ -24,7 +25,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
     @Override
     public void save(RoleRequestDTO request) {
         try {
-            request.setName(request.getName().toUpperCase());
+            request.setName(request.getName());
             this.roleRepository.save(this.roleMapper.toRoleModel(request));
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException("Violación de integridad al guardar el rol", e);
@@ -89,7 +90,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
             RoleModel roleModel = this.roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
             partialUpdateDTO.forEach((key, value) -> {
                 if (key.equals("name")) {
-                    roleModel.setName((String) value);
+                    roleModel.setName(RoleEnum.valueOf((String) value));
                 } else {
                     throw new ValidationException("Campo invalido: " + key);
                 }

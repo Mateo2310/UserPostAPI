@@ -1,5 +1,6 @@
 package com.challenge.userpostapi.infrastructure.persistence.repository.impl;
 
+import com.challenge.userpostapi.domain.enums.RoleEnum;
 import com.challenge.userpostapi.domain.model.RoleModel;
 import com.challenge.userpostapi.domain.repository.RoleRepositoryInterface;
 import com.challenge.userpostapi.infrastructure.mapper.RoleMapper;
@@ -42,7 +43,13 @@ public class RoleEntityRepositoryImpl implements RoleRepositoryInterface {
     }
 
     @Override
-    public Boolean existsByName(String name) {
+    public Boolean existsByName(RoleEnum name) {
         return this.roleEntityInterfaceRepository.existsRoleEntityByName(name);
+    }
+
+    @Override
+    public Optional<RoleModel> findByName(RoleEnum name) {
+        Optional<RoleEntity> roleEntity = this.roleEntityInterfaceRepository.findByName(name);
+        return Optional.ofNullable(this.roleMapper.toRoleModel(roleEntity.orElse(null)));
     }
 }

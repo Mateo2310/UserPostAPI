@@ -14,6 +14,8 @@ services:
       - DB_NAME=userpostapidb
       - DB_USER=userpostapi
       - DB_PASSWORD=wP9dX2rL7kF3bQ8hN4mA6cE1jY
+      - APP_ADMIN_USERNAME=admin
+      - APP_ADMIN_PASSWORD=x9!Vb7#qR4z@F2mLp8Ys
     networks:
       - userpostapi_network
 

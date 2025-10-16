@@ -1,5 +1,6 @@
 package com.challenge.userpostapi.infrastructure.persistence.entity;
 
+import com.challenge.userpostapi.domain.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +19,9 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    private RoleEnum name;
 
     @OneToMany(mappedBy = "roleEntity") // No genera una columna, solo referencia
     private List<UserEntity> users;

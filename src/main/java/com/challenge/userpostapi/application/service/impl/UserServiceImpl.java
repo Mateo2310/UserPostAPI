@@ -3,6 +3,7 @@ package com.challenge.userpostapi.application.service.impl;
 import com.challenge.userpostapi.application.dto.UserRequestDTO;
 import com.challenge.userpostapi.application.dto.UserResponseDTO;
 import com.challenge.userpostapi.application.service.interfaces.UserServiceInterface;
+import com.challenge.userpostapi.domain.enums.RoleEnum;
 import com.challenge.userpostapi.domain.exception.*;
 import com.challenge.userpostapi.domain.model.RoleModel;
 import com.challenge.userpostapi.domain.model.UserModel;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     public String save(UserRequestDTO request) {
         try {
-            RoleModel roleModel = this.roleRepository.findById(request.getRoleId()).orElseThrow(() -> new UnexpectedException("El rol con id " + request.getRoleId() + " no existe"));
+            RoleModel roleModel = this.roleRepository.findByName(RoleEnum.USER).orElseThrow(() -> new UnexpectedException("El rol USER no existe"));
             UserModel userModel = this.userMapper.toUserModel(request);
             userModel.setPassword(passwordEncoder.encode(request.getPassword()));
             userModel.setRoleModel(roleModel);
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     public UserResponseDTO update(Long id, UserRequestDTO requestDTO) {
         try {
-            RoleModel roleModel = this.roleRepository.findById(requestDTO.getRoleId()).orElseThrow(() -> new ResourceNotFoundException("El rol no existe"));
+            RoleModel roleModel = this.roleRepository.findByName(RoleEnum.USER).orElseThrow(() -> new UnexpectedException("El rol USER no existe"));
             UserModel userModel = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe"));
             userModel.setUsername(requestDTO.getUsername());
             userModel.setPassword(this.passwordEncoder.encode(requestDTO.getPassword()));

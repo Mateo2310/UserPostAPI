@@ -22,11 +22,5 @@ public class UserRequestDTO {
     @NotBlank(message = "The password is required")
     @NotEmpty(message = "The password is required")
     private String password;
-
-    @NotNull(message = "The enable is required")
-    private Boolean enabled;
-
-    @NotNull(message = "The role is required")
-    private Long roleId;
 }
 

@@ -17,7 +17,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(this.userModel.getRoleModel().getName());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(this.userModel.getRoleModel().getName().name());
         return  List.of(grantedAuthority);
     }
 

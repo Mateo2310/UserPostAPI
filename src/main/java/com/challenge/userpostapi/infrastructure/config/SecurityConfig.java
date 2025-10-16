@@ -1,5 +1,6 @@
 package com.challenge.userpostapi.infrastructure.config;
 
+import com.challenge.userpostapi.domain.enums.RoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +29,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**"
                         ).permitAll()
-                        .requestMatchers("/role/**").hasAuthority("ADMIN")
-                        .requestMatchers("/user/**").hasAuthority("ADMIN")
+                        .requestMatchers("/role/**").hasAuthority(RoleEnum.ADMIN.name())
+                        .requestMatchers("/user/**").hasAuthority(RoleEnum.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

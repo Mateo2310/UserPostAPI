@@ -27,9 +27,6 @@ public class UserEntity {
     @Column(name = "password",  nullable = false)
     private String password;
 
-    @Column(name = "enabled", nullable = false)
-    private Boolean enabled;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity roleEntity;

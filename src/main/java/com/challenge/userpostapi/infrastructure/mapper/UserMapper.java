@@ -19,7 +19,6 @@ public interface UserMapper {
     @Mapping(source = "roleModel", target = "roleEntity")
     UserEntity toUserEntity(UserModel userModel);
 
-    @Mapping(source = "roleId", target = "roleModel.id")
     UserModel toUserModel(UserRequestDTO userRequestDTO);
 
     @Mapping(source = "roleModel", target = "role")

@@ -45,4 +45,9 @@ public class UserEntityRepositoryImpl implements UserRepositoryInterface {
     public UserModel findByUsername(String username) {
         return this.userEntityInterfaceRepository.findByUsername(username).map(this.userMapper::toUserModel).orElse(null);
     }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        return this.userEntityInterfaceRepository.existsByUsername(username);
+    }
 }

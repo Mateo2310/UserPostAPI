@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class UserResponseDTO {
     private Long id;
     private String username;
-    private Boolean enabled;
     private RoleResponseDTO role;
 }

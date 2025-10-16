@@ -14,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationServiceInterface {
@@ -35,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceInterface
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         UserModel userModel = this.userService.findByUsername(request.getUsername());
-        if (userModel == null){
+        if (Objects.isNull(userModel)) {
             throw new BusinessException(request.getUsername());
         }
         String token = this.jwtService.generateToken(new UserDetailsImpl(userModel));
