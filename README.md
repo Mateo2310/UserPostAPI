@@ -30,15 +30,23 @@ Esta aplicación permite:
    docker-compose up --build
    ```
    Esto levantará dos servicios:
- * app: la API Spring Boot en el puerto 8081.
- * db: PostgreSQL en el puerto 5432.
+ * **app**: la API Spring Boot en el puerto 8081.
+ * **db**: PostgreSQL en el puerto 5432.
+ * **swagger**: http://localhost:8081/swagger-ui/index.html
 
 3. Variables de entorno:
-- DB_HOST=db
-- DB_PORT=5432
-- DB_NAME=userpostapidb
-- DB_USER=userpostapi
-- DB_PASSWORD=wP9dX2rL7kF3bQ8hN4mA6cE1jY
+- **DB_HOST**: db
+- **DB_PORT**: 5432
+- **DB_NAME**: userpostapidb
+- **DB_USER**: userpostapi
+- **DB_PASSWORD**: wP9dX2rL7kF3bQ8hN4mA6cE1jY
 
 Allí podrás probar todos los endpoints: usuarios, roles y posts.
+
+## Aclaraciones
+
+- El proyecto carga el rol **ADMIN** automaticamente cuando se ejecuta, si existe no lo carga.
+- La arquitectura seleccionada es la onion, con sus respectivas capas, **domain**, **application**, **infrastructure**.
+- La autenticacion esta realizada con Spring Security y JWT.
+- Para mas informacion de los endpoints y registro en la app dirigirse al link del Swagger.
 
