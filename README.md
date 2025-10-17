@@ -40,12 +40,14 @@ Esta aplicación permite:
 - **DB_NAME**: userpostapidb
 - **DB_USER**: userpostapi
 - **DB_PASSWORD**: wP9dX2rL7kF3bQ8hN4mA6cE1jY
+- **APP_ADMIN_USERNAME**: admin
+- **APP_ADMIN_PASSWORD**: x9!Vb7#qR4z@F2mLp8Ys
 
 Allí podrás probar todos los endpoints: usuarios, roles y posts.
 
 ## Aclaraciones
 
-- El proyecto carga el rol **ADMIN** automaticamente cuando se ejecuta, si existe no lo carga.
+- El proyecto carga el rol **ADMIN** automaticamente cuando se ejecuta, si existe no lo carga. Como asi tambien un usuario con rol ADMIN, username y contraseña, la cual se encuentran en las variables de entorno **APP_ADMIN_USERNAME** y **APP_ADMIN_PASSWORD** mencionadas en el punto tres.
 - La arquitectura seleccionada es la onion, con sus respectivas capas, **domain**, **application**, **infrastructure**.
 - La autenticacion esta realizada con Spring Security y JWT.
 - Para mas informacion de los endpoints y registro en la app dirigirse al link del Swagger.
