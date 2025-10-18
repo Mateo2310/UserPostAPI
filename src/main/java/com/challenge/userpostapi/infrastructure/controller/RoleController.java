@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Tag(name = "Roles", description = "Endpoints para gestión de roles de usuario")
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/roles")
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleServiceInterface roleService;

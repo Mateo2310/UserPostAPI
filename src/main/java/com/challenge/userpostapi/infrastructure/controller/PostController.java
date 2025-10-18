@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 @RequiredArgsConstructor
 @Tag(name = "Posts", description = "Endpoints para gestión de posts de usuarios")
 public class PostController {

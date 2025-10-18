@@ -20,7 +20,7 @@ services:
       - userpostapi_network
 
   db:
-    image: postgres:latest
+    image: postgres:18
     container_name: userpost-db
     environment:
       - POSTGRES_DB=userpostapidb
